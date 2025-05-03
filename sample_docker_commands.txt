@@ -1,0 +1,106 @@
+
+[root@test-inst ~]# yum install docker
+
+[root@test-inst ~]# Sudo  docker run docker/whalesay cowsay boo
+
+[root@test-inst ~]# docker run docker/whalesay cowsay boo
+
+[root@test-inst ~]# docker run docker/whalesay cowsay Hello_world!
+
+[root@test-inst ~]# docker version
+E
+[root@test-inst ~]# docker run centos
+
+[root@test-inst ~]# docker run -it centos bash
+Emulate Docker CLI using podman. Create /etc/containers/nodocker to quiet msg.
+[root@b537b6cf6675 /]# cat /etc/*release*
+
+
+
+[root@test-inst ~]# docker run -it ubuntu bash
+
+root@6eccc67bdf66:/# apt-get install -y python
+
+root@6eccc67bdf66:/# apt-get update
+
+root@6eccc67bdf66:/# apt-get install -y python
+
+root@6eccc67bdf66:/# apt-get install -y python-is-python3
+
+root@6eccc67bdf66:/# apt-get install -y python-is-python3
+
+root@6eccc67bdf66:/# apt-get install python3-pip
+
+root@6eccc67bdf66:/# apt install python3-pip
+
+
+root@6eccc67bdf66:/# apt install python3-flask
+
+
+
+
+root@6eccc67bdf66:/opt# cat > /opt/app.py
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
+if __name__ == '__main__':
+    app.run(debug=True)
+^C
+root@6eccc67bdf66:/opt# cat /opt/app.py
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
+if __name__ == '__main__':
+    app.run(debug=True)
+root@6eccc67bdf66:/opt#
+
+
+
+root@6eccc67bdf66:/opt# FLASK_APP=app.py flask run --host=0.0.0.0
+
+
+root@6eccc67bdf66:/opt# history
+    1  apt-get install -y python
+    2  apt-get update
+    3  apt-get install -y python
+    4  apt-get install -y python-is-python3
+    5  python
+    6  pip install flask
+    7  apt-get install python-pip
+    8  apt-get install python3-pip
+    9  pip install flask
+   10  pipx install flask
+   11  apt install python3-pip
+   12  apt install python3-flask
+   13  cat > /opt/app.py
+   14  cd opt/
+   15  FLASK_APP=app.py flask run --host=0.0.0.0
+   16  vi /opt/app.py
+   17  nano /opt/app.py
+   18  cat > /opt/app.py
+   19  cat /opt/app.py
+   20  FLASK_APP=app.py flask run --host=0.0.0.0
+   21  history
+root@6eccc67bdf66:/opt#
+
+
+
+
+apt-get update
+apt-get install -y python-is-python3
+apt-get install python3-pip
+apt install python3-flask
+create or copy code to /opt/app.py
+
+
+FLASK_APP=app.py flask run --host=0.0.0.0	
