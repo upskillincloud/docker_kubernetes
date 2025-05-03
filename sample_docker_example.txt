@@ -1,0 +1,76 @@
+[root@test-inst sample-application]# git clone https://github.com/dockersamples/example-voting-app.git
+
+[root@test-inst sample-application]# ls -lrth
+total 4.0K
+drwxr-xr-x. 11 root root 4.0K Apr 20 03:05 example-voting-app
+[root@test-inst sample-application]# cd example-voting-app/
+[root@test-inst example-voting-app]# ls -lrth
+total 184K
+-rw-r--r--. 1 root root 2.5K Apr 20 03:05 README.md
+-rw-r--r--. 1 root root  288 Apr 20 03:05 MAINTAINERS
+-rw-r--r--. 1 root root  11K Apr 20 03:05 LICENSE
+drwxr-xr-x. 2 root root 4.0K Apr 20 03:05 k8s-specifications
+drwxr-xr-x. 2 root root   41 Apr 20 03:05 healthchecks
+-rw-r--r--. 1 root root  982 Apr 20 03:05 docker-stack.yml
+-rw-r--r--. 1 root root 2.0K Apr 20 03:05 docker-compose.yml
+-rw-r--r--. 1 root root 1.4K Apr 20 03:05 docker-compose.images.yml
+-rw-r--r--. 1 root root 148K Apr 20 03:05 architecture.excalidraw.png
+drwxr-xr-x. 4 root root  164 Apr 20 03:05 result
+drwxr-xr-x. 2 root root   63 Apr 20 03:05 worker
+drwxr-xr-x. 4 root root   93 Apr 20 03:05 vote
+drwxr-xr-x. 2 root root   69 Apr 20 03:05 seed-data
+[root@test-inst example-voting-app]# cd vote/
+[root@test-inst vote]# ls -lrth
+total 12K
+drwxr-xr-x. 2 root root   24 Apr 20 03:05 templates
+drwxr-xr-x. 3 root root   25 Apr 20 03:05 static
+-rw-r--r--. 1 root root   21 Apr 20 03:05 requirements.txt
+-rw-r--r--. 1 root root 1.1K Apr 20 03:05 Dockerfile
+-rw-r--r--. 1 root root 1.4K Apr 20 03:05 app.py
+[root@test-inst vote]# cat Dockerfile
+# base defines a base stage that uses the official python runtime base image
+FROM python:3.11-slim AS base
+
+# Add curl for healthcheck
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set the application directory
+WORKDIR /usr/local/app
+
+# Install our requirements.txt
+COPY requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# dev defines a stage for development, where it'll watch for filesystem changes
+FROM base AS dev
+RUN pip install watchdog
+ENV FLASK_ENV=development
+CMD ["python", "app.py"]
+
+# final defines the stage that will bundle the application for production
+FROM base AS final
+
+# Copy our code from the current folder to the working directory inside the container
+COPY . .
+
+# Make port 80 available for links and/or publish
+EXPOSE 80
+
+# Define our command to be run when launching the container
+CMD ["gunicorn", "app:app", "-b", "0.0.0.0:80", "--log-file", "-", "--access-logfile", "-", "--workers", "4", "--keep-alive", "0"]
+
+[root@test-inst vote]# cat requirements.txt
+Flask
+Redis
+gunicorn
+[root@test-inst vote]# docker build . -t voting-app
+
+[root@test-inst vote]# docker images
+
+[root@test-inst vote]# docker run -p 5000:80 voting-app
+
+
+
+
